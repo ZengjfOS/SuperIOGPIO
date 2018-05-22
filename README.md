@@ -2,7 +2,8 @@
 
 ## Code Analysis
 
-```
+## Output
+```C#
 void GPIO_TESTDlg::Gpio2_Out_detect()
 {
 	DWORD GPIO2;
@@ -41,5 +42,48 @@ void GPIO_TESTDlg::Gpio2_Out_detect()
 
     //退出SuperIO模式
 	SetPortVal(0x2e, 0xaa, 1);     
+}
+```
+
+## Input
+```C#
+void CL706_GPIO_TESTDlg::Gpio2_In_detect()
+{
+	DWORD dwPortVal=0;
+
+	SetPortVal(0x2e, 0x87, 1);
+	SetPortVal(0x2e, 0x87, 1);
+
+	SetPortVal(0x2e, 0x07, 1);
+	SetPortVal(0x2f, 0x07, 1);  // select logical device number
+
+	SetPortVal(0x2e, 0x1C, 1);  
+	SetPortVal(0x2f, 0x1C, 1);  
+	SetPortVal(0x2e, 0x30, 1);  //set configuration the device number register  
+	SetPortVal(0x2f, 0xDF, 1);  // set gpio port 2 is active
+
+	SetPortVal(0x2e, 0xe9, 1);
+	SetPortVal(0x2f, 0xFf, 1);   //set port2 is input
+
+	SetPortVal(0x2e,0xe9,1);
+	GetPortVal(0x2f, &dwPortVal, 1);
+	if(dwPortVal>>3&0x01)
+	  m_ButtonLED4.LedOn();
+	else
+	  m_ButtonLED4.LedOff();
+	if(dwPortVal>>2&0x01)
+	  m_ButtonLED3.LedOn();
+	else
+	  m_ButtonLED3.LedOff();
+	if(dwPortVal>>1&0x01)
+	 m_ButtonLED2.LedOn();
+	else
+	   m_ButtonLED2.LedOff();
+	if(dwPortVal&0x01)
+	   m_ButtonLED1.LedOn();
+	else
+	   m_ButtonLED1.LedOff();
+
+	 SetPortVal(0x2e, 0xaa, 1);    
 }
 ```

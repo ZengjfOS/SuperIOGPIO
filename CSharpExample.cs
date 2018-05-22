@@ -13,12 +13,9 @@ namespace InpOut32.Net
 {
     public partial class CSharpExample : Form
     {
-        bool m_bX64 = false;
-
         public CSharpExample()
         {
             InitializeComponent();
-            portAddr.Focus();
 
             uint nResult = AplexOS7116GPIO.initInpOut32Lib();
             if (nResult == 0)
@@ -26,6 +23,10 @@ namespace InpOut32.Net
                 lblMessage.Text = "Unable to open InpOut32 driver";
                 readByte.Enabled = false;
                 writeByte.Enabled = false;
+                readMode.Enabled = false;
+                writeMode.Enabled = false;
+                readValue.Enabled = false;
+                writeValue.Enabled = false;
             }
 
             AplexOS7116GPIO.initGPIO();
@@ -35,14 +36,17 @@ namespace InpOut32.Net
         {
             try
             {
-                char c;
+                ushort c;
                 // 字符串转16位short类型整数
                 short iPort = Convert.ToInt16(portAddr.Text, 16);
 
-                c = AplexOS7116GPIO.readByte(iPort);
+                if (AplexOS7116GPIO.m_bX64)
+                    c = AplexOS7116GPIO.Inp32_x64(iPort);
+                else
+                    c = AplexOS7116GPIO.Inp32(iPort);
                 
                 // 将读取的数据显示出来 
-                portValue.Text = Convert.ToInt32(c).ToString("X2");
+                portValue.Text = Convert.ToUInt16(c).ToString("X2");
             }
             catch (Exception ex)
             {
@@ -57,8 +61,11 @@ namespace InpOut32.Net
                 // 字符串转16位short类型整数
                 short iPort = Convert.ToInt16(portAddr.Text, 16);
                 short iData = Convert.ToInt16(portValue.Text, 16);
-                // textBox2.Text = "";
-                AplexOS7116GPIO.writeByte(iPort, iData);
+
+                if (AplexOS7116GPIO.m_bX64)
+                    AplexOS7116GPIO.Out32_x64(iPort, iData);
+                else
+                    AplexOS7116GPIO.Out32(iPort, iData);
             }
             catch (Exception ex)
             {
@@ -75,7 +82,7 @@ namespace InpOut32.Net
         {
             try
             {
-                char c;
+                short c;
                 c = AplexOS7116GPIO.getPinsMode();
                 
                 // 将读取的数据显示出来 
@@ -87,7 +94,7 @@ namespace InpOut32.Net
             }
         }
 
-        private void WriteMode_Click(object sender, EventArgs e)
+        private void writeMode_Click(object sender, EventArgs e)
         {
             try
             {
@@ -105,7 +112,7 @@ namespace InpOut32.Net
         {
             try
             {
-                char c;
+                short c;
                 c = AplexOS7116GPIO.getPinsVal();
                 
                 // 将读取的数据显示出来 
@@ -132,41 +139,15 @@ namespace InpOut32.Net
 
         }
 
-        private void readPin_Click(object sender, EventArgs e)
+        private void setPinValue_Click(object sender, EventArgs e)
         {
-            try
-            {
-                char c = (char)0;
-                if (pinMode.Text.Trim() == "1")
-                {
-                    AplexOS7116GPIO.setPinMode(AplexOS7116GPIO.hexStrToNum(pinNum.Text), 1);
-                    c = AplexOS7116GPIO.getPinVal(AplexOS7116GPIO.hexStrToNum(pinNum.Text));
-
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An error occured:\n" + ex.Message);
-            }
-
+            AplexOS7116GPIO.setPinMode(AplexOS7116GPIO.hexStrToNum(pinIndex.Text.Trim()), AplexOS7116GPIO.hexStrToNum(pinMode.Text.Trim()));
+            AplexOS7116GPIO.setPinVal(AplexOS7116GPIO.hexStrToNum(pinIndex.Text.Trim()), AplexOS7116GPIO.hexStrToNum(pinValue.Text.Trim()));
         }
 
-        private void writePin_Click(object sender, EventArgs e)
+        private void getPinValue_Click(object sender, EventArgs e)
         {
-            try
-            {
-                char c = (char)0;
-                if (pinMode.Text.Trim() == "0")
-                {
-                    AplexOS7116GPIO.setPinMode(AplexOS7116GPIO.hexStrToNum(pinNum.Text), 0);
-                    AplexOS7116GPIO.setPinVal(AplexOS7116GPIO.hexStrToNum(pinNum.Text.Trim()), AplexOS7116GPIO.hexStrToNum(pinValue.Text.Trim()));
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An error occured:\n" + ex.Message);
-            }
-
+            pinValue.Text = AplexOS7116GPIO.getPinVal(AplexOS7116GPIO.hexStrToNum(pinIndex.Text.Trim())).ToString("X") ;
         }
     }
 }

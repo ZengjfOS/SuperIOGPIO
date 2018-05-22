@@ -16,7 +16,7 @@ namespace InpOut32.CSharp.Net
         [DllImport("inpout32.dll")]
         public static extern void Out32(short PortAddress, short Data);
         [DllImport("inpout32.dll")]
-        public static extern char Inp32(short PortAddress);
+        public static extern ushort Inp32(short PortAddress);
 
         [DllImport("inpout32.dll")]
         public static extern void DlPortWritePortUshort(short PortAddress, ushort Data);
@@ -39,7 +39,7 @@ namespace InpOut32.CSharp.Net
         [DllImport("inpoutx64.dll", EntryPoint = "Out32")]
         public static extern void Out32_x64(short PortAddress, short Data);
         [DllImport("inpoutx64.dll", EntryPoint = "Inp32")]
-        public static extern char Inp32_x64(short PortAddress);
+        public static extern ushort Inp32_x64(short PortAddress);
 
         [DllImport("inpoutx64.dll", EntryPoint = "DlPortWritePortUshort")]
         public static extern void DlPortWritePortUshort_x64(short PortAddress, ushort Data);
@@ -56,10 +56,11 @@ namespace InpOut32.CSharp.Net
         [DllImport("inpoutx64.dll", EntryPoint = "SetPhysLong")]
         public static extern bool SetPhysLong_x64(ref int PortAddress, ref uint Data);
 
-        private static bool m_bX64 = false;
+        public static bool m_bX64 = false;
 
         public static short OUTPUT = 0;
         public static short INPUT = 1;
+        public static short PIN_SIZE = 8;
 
         public static short hexStrToNum(string str)
         {
@@ -98,9 +99,9 @@ namespace InpOut32.CSharp.Net
             }
         }
 
-        public static char readByte(short iPort)
+        public static short readByte(short iPort)
         {
-            char c = (char)0;
+            ushort c = 0;
 
             try
             {
@@ -113,7 +114,7 @@ namespace InpOut32.CSharp.Net
             {
                 MessageBox.Show("An error occured:\n" + ex.Message);
             }
-            return c;
+            return (short)(c & 0xFF);
         }
 
         public static void writeByte(short iPort, short iData)
@@ -178,9 +179,9 @@ namespace InpOut32.CSharp.Net
             }
         }
 
-        public static char getPinsMode()
+        public static short getPinsMode()
         {
-            char c = (char)0;
+            short c = 0;
             try
             {
                 writeByte(hexStrToNum("2e"), hexStrToNum("E8"));
@@ -194,15 +195,22 @@ namespace InpOut32.CSharp.Net
             return c;
         }
 
-        public static char getPinMode(short pin)
+        public static short getPinMode(short pin)
         {
-            char c = (char)0;
+            short c = 0;
+
+            if (pin < 0 || pin > (PIN_SIZE - 1))
+            {
+                MessageBox.Show("Pin Size Range: 0 - " + (PIN_SIZE - 1)+ "\n");
+                return c;
+            }
+
             try
             {
                 writeByte(hexStrToNum("2e"), hexStrToNum("E8"));
                 c = readByte(hexStrToNum("2f"));
 
-                return (char)((c >> pin) & 0x01);
+                return (short)((c >> pin) & 0x01);
             }
             catch (Exception ex)
             {
@@ -214,6 +222,17 @@ namespace InpOut32.CSharp.Net
 
         public static void setPinMode(short pin, short mode)
         {
+            if (pin < 0 || pin > (PIN_SIZE - 1))
+            {
+                MessageBox.Show("Pin Size Range: 0 - " + (PIN_SIZE - 1) + "\n");
+                return;
+            }
+            if (mode < 0 || mode > 1)
+            {
+                MessageBox.Show("Pin Mode Range: 0 - 1" + "\n");
+                return;
+            }
+
             try
             {
                 short c = (short)getPinsMode();
@@ -246,9 +265,9 @@ namespace InpOut32.CSharp.Net
             }
         }
 
-        public static char getPinsVal()
+        public static short getPinsVal()
         {
-            char c = (char)0;
+            short c = 0;
             try
             {
                 writeByte(hexStrToNum("2e"), hexStrToNum("E9"));
@@ -262,15 +281,22 @@ namespace InpOut32.CSharp.Net
             return c;
         }
 
-        public static char getPinVal(short pin)
+        public static short getPinVal(short pin)
         {
-            char c = (char)0;
+            short c = 0;
+
+            if (pin < 0 || pin > (PIN_SIZE - 1))
+            {
+                MessageBox.Show("Pin Size range: 0 - " + (PIN_SIZE - 1) + "\n");
+                return c;
+            }
+
             try
             {
                 writeByte(hexStrToNum("2e"), hexStrToNum("E9"));
                 c = readByte(hexStrToNum("2f"));
 
-                return (char)((c >> pin) & 0x01);
+                return (short)((c >> pin) & 0x01);
             }
             catch (Exception ex)
             {
@@ -282,6 +308,17 @@ namespace InpOut32.CSharp.Net
 
         public static void setPinVal(short pin, short val)
         {
+            if (pin < 0 || pin > (PIN_SIZE - 1))
+            {
+                MessageBox.Show("Pin Size Range: 0 - " + (PIN_SIZE - 1) + "\n");
+                return;
+            }
+            if (val < 0 || val > 1)
+            {
+                MessageBox.Show("Pin Val Range: 0 - 1" + "\n");
+                return;
+            }
+
             try
             {
                 short c = (short)getPinsVal();

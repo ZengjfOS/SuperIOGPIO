@@ -36,20 +36,21 @@ namespace InpOut32.Net
             this.label2 = new System.Windows.Forms.Label();
             this.lblMessage = new System.Windows.Forms.Label();
             this.readMode = new System.Windows.Forms.Button();
-            this.WriteMode = new System.Windows.Forms.Button();
+            this.writeMode = new System.Windows.Forms.Button();
             this.readValue = new System.Windows.Forms.Button();
             this.writeValue = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.pinNum = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.pinMode = new System.Windows.Forms.TextBox();
-            this.readPin = new System.Windows.Forms.Button();
-            this.writePin = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.pinIndex = new System.Windows.Forms.TextBox();
+            this.setPinValue = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
+            this.getPinValue = new System.Windows.Forms.Button();
             this.pinValue = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
@@ -88,6 +89,7 @@ namespace InpOut32.Net
             this.portValue.Name = "portValue";
             this.portValue.Size = new System.Drawing.Size(182, 21);
             this.portValue.TabIndex = 1;
+            this.portValue.Text = "00";
             // 
             // label1
             // 
@@ -125,15 +127,15 @@ namespace InpOut32.Net
             this.readMode.UseVisualStyleBackColor = true;
             this.readMode.Click += new System.EventHandler(this.readMode_Click);
             // 
-            // WriteMode
+            // writeMode
             // 
-            this.WriteMode.Location = new System.Drawing.Point(118, 161);
-            this.WriteMode.Name = "WriteMode";
-            this.WriteMode.Size = new System.Drawing.Size(86, 23);
-            this.WriteMode.TabIndex = 5;
-            this.WriteMode.Text = "Write Mode";
-            this.WriteMode.UseVisualStyleBackColor = true;
-            this.WriteMode.Click += new System.EventHandler(this.WriteMode_Click);
+            this.writeMode.Location = new System.Drawing.Point(118, 161);
+            this.writeMode.Name = "writeMode";
+            this.writeMode.Size = new System.Drawing.Size(86, 23);
+            this.writeMode.TabIndex = 5;
+            this.writeMode.Text = "Write Mode";
+            this.writeMode.UseVisualStyleBackColor = true;
+            this.writeMode.Click += new System.EventHandler(this.writeMode_Click);
             // 
             // readValue
             // 
@@ -157,22 +159,22 @@ namespace InpOut32.Net
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.groupBox3);
             this.groupBox1.Controls.Add(this.writeValue);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.readValue);
             this.groupBox1.Controls.Add(this.readByte);
-            this.groupBox1.Controls.Add(this.WriteMode);
+            this.groupBox1.Controls.Add(this.writeMode);
             this.groupBox1.Controls.Add(this.writeByte);
             this.groupBox1.Controls.Add(this.readMode);
             this.groupBox1.Controls.Add(this.portAddr);
             this.groupBox1.Controls.Add(this.lblMessage);
             this.groupBox1.Controls.Add(this.portValue);
             this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.groupBox3);
             this.groupBox1.Controls.Add(this.groupBox2);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(425, 226);
+            this.groupBox1.Size = new System.Drawing.Size(426, 226);
             this.groupBox1.TabIndex = 18;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Debug Tools";
@@ -188,108 +190,118 @@ namespace InpOut32.Net
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.getPinValue);
             this.groupBox3.Controls.Add(this.label5);
-            this.groupBox3.Controls.Add(this.pinValue);
+            this.groupBox3.Controls.Add(this.setPinValue);
+            this.groupBox3.Controls.Add(this.pinIndex);
+            this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Controls.Add(this.label3);
-            this.groupBox3.Controls.Add(this.pinNum);
-            this.groupBox3.Controls.Add(this.label4);
+            this.groupBox3.Controls.Add(this.pinValue);
             this.groupBox3.Controls.Add(this.pinMode);
-            this.groupBox3.Controls.Add(this.writePin);
-            this.groupBox3.Controls.Add(this.readPin);
-            this.groupBox3.Location = new System.Drawing.Point(223, 20);
+            this.groupBox3.Location = new System.Drawing.Point(219, 20);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(196, 201);
-            this.groupBox3.TabIndex = 9;
+            this.groupBox3.Size = new System.Drawing.Size(198, 201);
+            this.groupBox3.TabIndex = 8;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Pin Info";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 14);
+            this.label3.Location = new System.Drawing.Point(10, 64);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(101, 12);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Pin Number (Hex)";
+            this.label3.Size = new System.Drawing.Size(89, 12);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Pin Mode (Hex)";
             // 
-            // pinNum
+            // pinMode
             // 
-            this.pinNum.Location = new System.Drawing.Point(9, 30);
-            this.pinNum.Name = "pinNum";
-            this.pinNum.Size = new System.Drawing.Size(181, 21);
-            this.pinNum.TabIndex = 0;
-            this.pinNum.Text = "0";
+            this.pinMode.Location = new System.Drawing.Point(10, 79);
+            this.pinMode.Name = "pinMode";
+            this.pinMode.Size = new System.Drawing.Size(182, 21);
+            this.pinMode.TabIndex = 1;
+            this.pinMode.Text = "0";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(7, 58);
+            this.label4.Location = new System.Drawing.Point(238, 137);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(89, 12);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Pin Mode (Hex)";
+            this.label4.Size = new System.Drawing.Size(0, 12);
+            this.label4.TabIndex = 7;
             // 
-            // pinMode
+            // pinIndex
             // 
-            this.pinMode.Location = new System.Drawing.Point(9, 73);
-            this.pinMode.Name = "pinMode";
-            this.pinMode.Size = new System.Drawing.Size(181, 21);
-            this.pinMode.TabIndex = 1;
-            this.pinMode.Text = "0";
+            this.pinIndex.Location = new System.Drawing.Point(10, 36);
+            this.pinIndex.Name = "pinIndex";
+            this.pinIndex.Size = new System.Drawing.Size(182, 21);
+            this.pinIndex.TabIndex = 0;
+            this.pinIndex.Text = "0";
             // 
-            // readPin
+            // setPinValue
             // 
-            this.readPin.Location = new System.Drawing.Point(9, 156);
-            this.readPin.Name = "readPin";
-            this.readPin.Size = new System.Drawing.Size(85, 23);
-            this.readPin.TabIndex = 2;
-            this.readPin.Text = "Read Pin";
-            this.readPin.UseVisualStyleBackColor = true;
-            this.readPin.Click += new System.EventHandler(this.readPin_Click);
-            // 
-            // writePin
-            // 
-            this.writePin.Location = new System.Drawing.Point(105, 156);
-            this.writePin.Name = "writePin";
-            this.writePin.Size = new System.Drawing.Size(85, 23);
-            this.writePin.TabIndex = 2;
-            this.writePin.Text = "Write Pin";
-            this.writePin.UseVisualStyleBackColor = true;
-            this.writePin.Click += new System.EventHandler(this.writePin_Click);
+            this.setPinValue.Location = new System.Drawing.Point(9, 160);
+            this.setPinValue.Name = "setPinValue";
+            this.setPinValue.Size = new System.Drawing.Size(84, 23);
+            this.setPinValue.TabIndex = 6;
+            this.setPinValue.Text = "Set Value";
+            this.setPinValue.UseVisualStyleBackColor = true;
+            this.setPinValue.Click += new System.EventHandler(this.setPinValue_Click);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 97);
+            this.label5.Location = new System.Drawing.Point(7, 21);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(95, 12);
-            this.label5.TabIndex = 8;
-            this.label5.Text = "Pin Value (Hex)";
+            this.label5.TabIndex = 5;
+            this.label5.Text = "Pin Index (Hex)";
+            // 
+            // getPinValue
+            // 
+            this.getPinValue.Location = new System.Drawing.Point(106, 160);
+            this.getPinValue.Name = "getPinValue";
+            this.getPinValue.Size = new System.Drawing.Size(86, 23);
+            this.getPinValue.TabIndex = 7;
+            this.getPinValue.Text = "Get Value";
+            this.getPinValue.UseVisualStyleBackColor = true;
+            this.getPinValue.Click += new System.EventHandler(this.getPinValue_Click);
             // 
             // pinValue
             // 
-            this.pinValue.Location = new System.Drawing.Point(8, 112);
+            this.pinValue.Location = new System.Drawing.Point(9, 122);
             this.pinValue.Name = "pinValue";
-            this.pinValue.Size = new System.Drawing.Size(181, 21);
-            this.pinValue.TabIndex = 7;
+            this.pinValue.Size = new System.Drawing.Size(182, 21);
+            this.pinValue.TabIndex = 1;
             this.pinValue.Text = "0";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(9, 107);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(95, 12);
+            this.label6.TabIndex = 6;
+            this.label6.Text = "Pin Value (Hex)";
             // 
             // CSharpExample
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(449, 240);
+            this.ClientSize = new System.Drawing.Size(449, 246);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "CSharpExample";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "InpOut C# Test";
+            this.Text = "InpOut SuperIO C# Test";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CSharpExample_FormClosing);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -303,20 +315,21 @@ namespace InpOut32.Net
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblMessage;
         private System.Windows.Forms.Button readMode;
-        private System.Windows.Forms.Button WriteMode;
+        private System.Windows.Forms.Button writeMode;
         private System.Windows.Forms.Button readValue;
         private System.Windows.Forms.Button writeValue;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox pinNum;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox pinMode;
-        private System.Windows.Forms.Button writePin;
-        private System.Windows.Forms.Button readPin;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button getPinValue;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button setPinValue;
+        private System.Windows.Forms.TextBox pinIndex;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox pinValue;
+        private System.Windows.Forms.TextBox pinMode;
+        private System.Windows.Forms.Label label4;
     }
 }
 
