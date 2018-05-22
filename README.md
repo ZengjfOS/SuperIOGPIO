@@ -1,5 +1,9 @@
 ﻿# README
 
+**本分支是Windows操作SuperIO方法，Linux版本请参考**: [SuperIOGPIO Linux Branch](https://github.com/ZengjfOS/SuperIOGPIO/tree/Linux)
+
+## 示例使用说明
+
 ![./images/SuperIOGPIO.png](./images/SuperIOGPIO.png)
 
 * 开发环境：VS2015
