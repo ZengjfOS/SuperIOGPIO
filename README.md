@@ -2,7 +2,21 @@
 
 ![./images/SuperIOGPIO.png](./images/SuperIOGPIO.png)
 
-参考库：[InpOut32 and InpOutx64](http://www.highrez.co.uk/downloads/inpout32/?yyue=a21bo.50862.201879)
+* 开发环境：VS2015
+* `Port Info`: 操作整个GPIO Port的部分，目前主板有8个GPIO，这部分API可以直接操作8个GPIO口；
+  * `Port Address (Hex)`: 主要是给原生InpOut32接口提供的地址值；
+  * `Port Value (Hex)`: 设置的，或者执行程序返回的显示值；
+  * `Read BYTE`、`Write BYTE`: InpOut32提供的原生单字节访问接口；
+  * `Read Mode`、`Write Mode`: 是获取、设置8个GPIO的输入输出模式；
+  * `Read Value`、`Write Value`: 是获取、设置8个GPIO的值；
+* `Pin Info`: 针对单独的某一个GPIO进行操作；
+  * `Pin Index (Hex)`: GPIO口Pin脚索引，`0~7`；
+  * `Pin Mode (Hex)`: GPIO口Pin脚输入输出模式设置，`0（输出模式）、1（输入模式）`；
+  * `Pin Value (Hex)`: GPIO口Pin脚对应的值；
+
+## 参考库
+
+[InpOut32 and InpOutx64](http://www.highrez.co.uk/downloads/inpout32/?yyue=a21bo.50862.201879)
 
 ## 下载已编译程序
 
