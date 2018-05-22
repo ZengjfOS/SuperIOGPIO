@@ -1,7 +1,7 @@
 # README
 
 * devmem2版本：[devmem2.sh](devmem2.sh)
-* C语言系统调用版本：[SuperIOGPIO.c](SuperIOGPIO.c)
+* C语言系统调用版本：[SuperIOGPIO.c](SuperIOGPIO.c)、[autorun.sh](autorun.sh)
 
 
 ## 参考文档
@@ -10,12 +10,13 @@
 * [Coreboot - SuperIO](http://coreboot.blogspot.jp/2009/01/coreboot-superio.html)
 * [Shell command to read device registers?](https://unix.stackexchange.com/questions/4948/shell-command-to-read-device-registers)
 * https://github.com/hackndev/tools/blob/master/devmem2.c
+* [outb() problem - Segmentation fault](http://forums.justlinux.com/showthread.php?127692-outb()-problem-Segmentation-fault)
 
 ## Install dependents
 
 * `sudo apt-get install devmem2`
 
-## 运行devmem2、系统调用
+## 使用devmem2
 
 * [devmem2.sh](devmem2.sh]
   ```
@@ -75,6 +76,9 @@
   Memory mapped at address 0x7f3f882e8000.
   Value at address 0x2F (0x7f3f882e802f): 0xF0
   ```
+
+## 使用系统调用
+
 * [autorun.sh](autorun.sh)
   ```
   type = o, addr = 2e, data = 87, backdata = ff
