@@ -1,89 +1,37 @@
 ﻿# README
 
-## Code Analysis
+![./images/SuperIOGPIO.png](./images/SuperIOGPIO.png)
 
-## Output
-```C#
-void GPIO_TESTDlg::Gpio2_Out_detect()
-{
-	DWORD GPIO2;
+参考库：[InpOut32 and InpOutx64](http://www.highrez.co.uk/downloads/inpout32/?yyue=a21bo.50862.201879)
 
-	//进入SuperIO芯片控制页表
-	SetPortVal(0x2e, 0x87, 1);
-	SetPortVal(0x2e, 0x87, 1);
+## 下载已编译程序
 
-	//进入GPIO控制页表
-	SetPortVal(0x2e, 0x07, 1);
-	SetPortVal(0x2f, 0x07, 1);  // select logical device number
+[SuperIOGPIO.rar](SuperIOGPIO.rar)
 
-	//引脚复用，GPIO Port2选择为GPIO口模式
-	SetPortVal(0x2e, 0x1C, 1);
-	SetPortVal(0x2f, 0x1C, 1);  
-	SetPortVal(0x2e, 0x30, 1);  //set configuration the device number register  
-	SetPortVal(0x2f, 0xDF, 1);  // set gpio port 2 is active
+## 二次封装使用库
 
-	//设置GPIO为Input、Output模式，0表示output， 1表示input
-	SetPortVal(0x2e, 0xe8, 1);
-	SetPortVal(0x2f, 0x00, 1);   //set port2 is 0 = output
-
-	unsigned char B0 = ((CButton*) GetDlgItem(IDC_CHECK1))->GetCheck();
-	unsigned char B1 = ((CButton*) GetDlgItem(IDC_CHECK2))->GetCheck();
-	unsigned char B2 = ((CButton*) GetDlgItem(IDC_CHECK3))->GetCheck();
-	unsigned char B3 = ((CButton*) GetDlgItem(IDC_CHECK4))->GetCheck();
-	unsigned char B4 = ((CButton*) GetDlgItem(IDC_CHECK5))->GetCheck();
-	unsigned char B5 = ((CButton*) GetDlgItem(IDC_CHECK6))->GetCheck();
-	unsigned char B6 = ((CButton*) GetDlgItem(IDC_CHECK7))->GetCheck();
-	unsigned char B7 = ((CButton*) GetDlgItem(IDC_CHECK8))->GetCheck();
-
-	GPIO2 = (( (B7 << 7) | (B6 << 6) | (B5 << 5) | (B4 << 4) | (B3 << 3) | (B2 << 2) | (B1 << 1) | (B0) ) & 0xFF);
-    //input模式下，获取值；output模式下，设置1为拉高，设置0为拉低
-	SetPortVal(0x2e, 0xe9, 1);   
-	SetPortVal(0x2f, GPIO2, 1);  //output 
-
-    //退出SuperIO模式
-	SetPortVal(0x2e, 0xaa, 1);     
-}
-```
-
-## Input
-```C#
-void CL706_GPIO_TESTDlg::Gpio2_In_detect()
-{
-	DWORD dwPortVal=0;
-
-	SetPortVal(0x2e, 0x87, 1);
-	SetPortVal(0x2e, 0x87, 1);
-
-	SetPortVal(0x2e, 0x07, 1);
-	SetPortVal(0x2f, 0x07, 1);  // select logical device number
-
-	SetPortVal(0x2e, 0x1C, 1);  
-	SetPortVal(0x2f, 0x1C, 1);  
-	SetPortVal(0x2e, 0x30, 1);  //set configuration the device number register  
-	SetPortVal(0x2f, 0xDF, 1);  // set gpio port 2 is active
-
-	SetPortVal(0x2e, 0xe9, 1);
-	SetPortVal(0x2f, 0xFf, 1);   //set port2 is input
-
-	SetPortVal(0x2e,0xe9,1);
-	GetPortVal(0x2f, &dwPortVal, 1);
-	if(dwPortVal>>3&0x01)
-	  m_ButtonLED4.LedOn();
-	else
-	  m_ButtonLED4.LedOff();
-	if(dwPortVal>>2&0x01)
-	  m_ButtonLED3.LedOn();
-	else
-	  m_ButtonLED3.LedOff();
-	if(dwPortVal>>1&0x01)
-	 m_ButtonLED2.LedOn();
-	else
-	   m_ButtonLED2.LedOff();
-	if(dwPortVal&0x01)
-	   m_ButtonLED1.LedOn();
-	else
-	   m_ButtonLED1.LedOff();
-
-	 SetPortVal(0x2e, 0xaa, 1);    
-}
-```
+* 参考源代码： [AplexOS7116GPIO.cs](AplexOS7116GPIO.cs)；
+* 将[inpout32_lib](inpout32_lib)目录下的库文件拷贝到编译后的的`bin/Debug`、`bin/Release`目录，程序运行依赖这两个库；
+* API说明：
+  * `public static uint initInpOut32Lib()`  
+    初始化检查InpOut32库；
+  * `public static void initGPIO()`  
+    初始化GPIO控制器；
+  * `public static void freeGPIO()`  
+    释放GPIO控制器；
+  * `public static void setPinsMode(short iData)`  
+    一次性设置所有GPIO口是为Input、Output模式，每一位表示一个对应的GPIO口，`1`表示Input，`0`表示Output，目前只有8个GPIO，对应short类型的低八位，`7~0` bit对应`7~0` GPIO；
+  * `public static short getPinsMode()`  
+    一次性获取所有GPIO口是为Input、Output模式，每一位表示一个对应的GPIO口，`1`表示Input，`0`表示Output，目前只有8个GPIO，对应short类型的低八位，`7~0` bit对应`7~0` GPIO；
+  * `public static short getPinMode(short pin)`  
+    获取pin对应的GPIO口模式，`1`表示Input，`0`表示Output，目前只有8个GPIO，pin取值范围为`0~7`；
+  * `public static void setPinMode(short pin, short mode)`  
+    设置pin对应的GPIO口模式，目前只有8个GPIO，pin取值范围为`0~7`。mode取值为`1`表示Input，`0`表示Output；
+  * `public static void setPinsVal(short iData)`  
+    一次性设置所有GPIO口值，每一位表示一个对应的GPIO口，`1`表示Input，`0`表示Output，目前只有8个GPIO，对应short类型的低八位，`7~0` bit对应`7~0` GPIO；
+  * `public static short getPinsVal()`  
+    一次性获取所有GPIO口值，每一位表示一个对应的GPIO口，`1`表示Input，`0`表示Output，目前只有8个GPIO，对应short类型的低八位，`7~0` bit对应`7~0` GPIO；
+  * `public static short getPinVal(short pin)`  
+    获取pin对应的GPIO口值，目前只有8个GPIO，pin取值范围为`0~7`，返回值0表示低电平，1表示高电平；
+  * `public static void setPinVal(short pin, short val)`  
+    设置pin对应的GPIO口值，目前只有8个GPIO，pin取值范围为`0~7`，val的值0表示低电平，1表示高电平；
