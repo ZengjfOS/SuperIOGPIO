@@ -46,9 +46,9 @@
   * `public static void setPinMode(short pin, short mode)`  
     设置pin对应的GPIO口模式，目前只有8个GPIO，pin取值范围为`0~7`。mode取值为`1`表示Input，`0`表示Output；
   * `public static void setPinsVal(short iData)`  
-    一次性设置所有GPIO口值，每一位表示一个对应的GPIO口，`1`表示Input，`0`表示Output，目前只有8个GPIO，对应short类型的低八位，`7~0` bit对应`7~0` GPIO；
+    一次性设置所有GPIO口值，每一位表示一个对应的GPIO口，`1`表示High，`0`表示Low，目前只有8个GPIO，对应short类型的低八位，`7~0` bit对应`7~0` GPIO；
   * `public static short getPinsVal()`  
-    一次性获取所有GPIO口值，每一位表示一个对应的GPIO口，`1`表示Input，`0`表示Output，目前只有8个GPIO，对应short类型的低八位，`7~0` bit对应`7~0` GPIO；
+    一次性获取所有GPIO口值，每一位表示一个对应的GPIO口，`1`表示High，`0`表示Low，目前只有8个GPIO，对应short类型的低八位，`7~0` bit对应`7~0` GPIO；
   * `public static short getPinVal(short pin)`  
     获取pin对应的GPIO口值，目前只有8个GPIO，pin取值范围为`0~7`，返回值0表示低电平，1表示高电平；
   * `public static void setPinVal(short pin, short val)`  
