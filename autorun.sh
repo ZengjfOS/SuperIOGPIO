@@ -1,7 +1,6 @@
 #!/bin/sh
 
 ./SuperIOGPIO o 0x2e 0x87
-
 ./SuperIOGPIO o 0x2e 0x87
 
 ./SuperIOGPIO o 0x2e 0x07
@@ -14,10 +13,10 @@
 ./SuperIOGPIO o 0x2f 0xDF
 
 ./SuperIOGPIO o 0x2e 0xe8
-./SuperIOGPIO o 0x2f 0x00
+./SuperIOGPIO o 0x2f 0x00 # set GPIO mode(8 bit present 8 GPIO: 0 -> output; 1 -> input);
 
 ./SuperIOGPIO o 0x2e 0xe9
-./SuperIOGPIO o 0x2f 0xf0
+./SuperIOGPIO o 0x2f 0xf0 # set GPIO value(8 bit present 8 GPIO: 0 -> low level; 1 -> high level);
 
 ./SuperIOGPIO i 0x2f 
 

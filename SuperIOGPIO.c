@@ -10,11 +10,13 @@ int main(int argc, char** argv)
 	int ret = 0;
 
 	if (argc < 0 || argc >4)
-		return 0;
+		return -1;
 
 	ret = ioperm(0x2e, 2, 1);
-	if (ret != 0)
+	if (ret != 0) {
 		printf("ioperm error.");
+		return -1;
+	}
 
 	type = *argv[1];
 	addr = strtol(argv[2], 0, 0);

@@ -18,7 +18,7 @@
 
 ## 使用devmem2
 
-* [devmem2.sh](devmem2.sh]
+* [devmem2.sh](devmem2.sh)
   ```
   /dev/mem opened.
   Memory mapped at address 0x7feebdcf7000.
