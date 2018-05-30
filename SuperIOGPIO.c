@@ -9,8 +9,11 @@ int main(int argc, char** argv)
 	unsigned char data = 0;
 	int ret = 0;
 
-	if (argc < 0 || argc >4)
+	if (argc < 0 || argc >4) {
+		printf("SuperIOGPIO i <hex address>");
+		printf("SuperIOGPIO o <hex address> <hex value>");
 		return -1;
+	}
 
 	ret = ioperm(0x2e, 2, 1);
 	if (ret != 0) {

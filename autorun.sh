@@ -1,23 +1,80 @@
 #!/bin/sh
 
-./SuperIOGPIO o 0x2e 0x87
-./SuperIOGPIO o 0x2e 0x87
+setGPIOReg()
+{
+	./SuperIOGPIO o 0x2e $1
+}
 
-./SuperIOGPIO o 0x2e 0x07
-./SuperIOGPIO o 0x2f 0x07
+setGPIOVal()
+{
+	./SuperIOGPIO o 0x2f $1
+}
 
-./SuperIOGPIO o 0x2e 0x1C
-./SuperIOGPIO o 0x2f 0x1C
+getGPIOVal()
+{
+	./SuperIOGPIO i 0x2f
+}
 
-./SuperIOGPIO o 0x2e 0x30
-./SuperIOGPIO o 0x2f 0xDF
+setGPIORegVal()
+{
+	setGPIOReg $1
+	setGPIOVal $2
+}
 
-./SuperIOGPIO o 0x2e 0xe8
-./SuperIOGPIO o 0x2f 0x00 # set GPIO mode(8 bit present 8 GPIO: 0 -> output; 1 -> input);
+setGPIOMode()
+{
+	setGPIOReg 0xe8
+	setGPIOVal $1 	# set GPIO mode(8 bit present 8 GPIO: 0 -> output; 1 -> input);
+}
 
-./SuperIOGPIO o 0x2e 0xe9
-./SuperIOGPIO o 0x2f 0xf0 # set GPIO value(8 bit present 8 GPIO: 0 -> low level; 1 -> high level);
+setOutputVal()
+{
+	setGPIOReg 0xe9
+	setGPIOVal $1 	# set GPIO value(8 bit present 8 GPIO: 0 -> low level; 1 -> high level);
+}
 
-./SuperIOGPIO i 0x2f 
+getInputVal()
+{
+	getGPIOVal
+}
 
-./SuperIOGPIO o 0x2e 0xaa
+startSuperIO ()
+{
+	setGPIOReg 0x87
+	setGPIOReg 0x87
+}
+
+exitGPIO ()
+{
+	setGPIOReg 0xaa
+}
+
+initGPIO () 
+{
+	startSuperIO
+
+	setGPIORegVal 0x07 0x07
+	setGPIORegVal 0x1C 0x1C
+	setGPIORegVal 0x30 0xDF
+
+}
+
+
+initGPIO
+setGPIOMode 0x00 	# set GPIO mode(8 bit present 8 GPIO: 0 -> output; 1 -> input);
+setOutputVal 0x00	# set GPIO value(8 bit present 8 GPIO: 0 -> low level; 1 -> high level);
+
+# while [ "$min" -le "$max" ]
+while true
+do
+	setOutputVal 0xff	# set GPIO value(8 bit present 8 GPIO: 0 -> low level; 1 -> high level);
+	getInputVal
+	sleep 1
+
+	setOutputVal 0x00	# set GPIO value(8 bit present 8 GPIO: 0 -> low level; 1 -> high level);
+	getInputVal
+	sleep 1
+
+done
+
+exitGPIO
