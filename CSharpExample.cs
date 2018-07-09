@@ -29,7 +29,6 @@ namespace InpOut32.Net
                 writeValue.Enabled = false;
             }
 
-            AplexOS7116GPIO.initGPIO();
         }
 
         private void readByte_Click(object sender, EventArgs e)
@@ -148,6 +147,14 @@ namespace InpOut32.Net
         private void getPinValue_Click(object sender, EventArgs e)
         {
             pinValue.Text = AplexOS7116GPIO.getPinVal(AplexOS7116GPIO.hexStrToNum(pinIndex.Text.Trim())).ToString("X") ;
+        }
+
+        private void pinInitPort_Click(object sender, EventArgs e)
+        {
+
+            AplexOS7116GPIO.addressPort = pinAddrPort.Text;
+            AplexOS7116GPIO.dataPort = pinDataPort.Text;
+            AplexOS7116GPIO.initGPIO();
         }
     }
 }

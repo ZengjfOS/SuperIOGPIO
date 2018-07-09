@@ -14,6 +14,8 @@
   * `Read Mode`、`Write Mode`: 是获取、设置8个GPIO的输入输出模式；
   * `Read Value`、`Write Value`: 是获取、设置8个GPIO的值；
 * `Pin Info`: 针对单独的某一个GPIO进行操作；
+  * `Address Port`: Super IO Port Address Register；
+  * `Data Port`: Super IO Port Data Register；
   * `Pin Index (Hex)`: GPIO口Pin脚索引，`0~7`；
   * `Pin Mode (Hex)`: GPIO口Pin脚输入输出模式设置，`0（输出模式）、1（输入模式）`；
   * `Pin Value (Hex)`: GPIO口Pin脚对应的值；
@@ -24,13 +26,16 @@
 
 ## 下载已编译程序
 
-[SuperIOGPIO.rar](SuperIOGPIO.rar)
+[SuperIOGPIO.zip](SuperIOGPIO.zip)
 
 ## 二次封装使用库
 
 * 参考源代码： [AplexOS7116GPIO.cs](AplexOS7116GPIO.cs)；
 * 将[inpout32_lib](inpout32_lib)目录下的库文件拷贝到编译后的的`bin/Debug`、`bin/Release`目录，程序运行依赖这两个库；
 * API说明：
+  * Super IO Address(注意修改成对应的地址):
+    * `public static string addressPort= "4E"`
+    * `public static string dataPort = "4F"`
   * `public static uint initInpOut32Lib()`  
     初始化检查InpOut32库；
   * `public static void initGPIO()`  
